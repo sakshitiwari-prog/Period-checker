@@ -21,9 +21,9 @@ const postRequest = async (url, data) => {
   }
 };
 function checkInternetConnection(sDate, eDate) {
-  let periods;
   let dateObject;
   let userId;
+  let parseData;
   if (navigator.onLine) {
     if (sDate && eDate) {
       const data = window.localStorage.getItem(STORAGE_KEY);
@@ -59,7 +59,7 @@ function checkInternetConnection(sDate, eDate) {
 
       if (data) {
         console.log(data, "0");
-        let parseData = JSON.parse(data);
+        parseData = JSON.parse(data);
         renderPastPeriods(parseData.dateList);
         postRequest(url, JSON.parse(data))
           .then((data) => {
@@ -72,8 +72,9 @@ function checkInternetConnection(sDate, eDate) {
     }
   } else {
     const data = window.localStorage.getItem(STORAGE_KEY);
-    console.log(data, "data");
-    if (data) {
+    console.log(data, "data inside else");
+    parseData = JSON.parse(data);
+    if (parseData && parseData.userId != null) {
       let parseData = JSON.parse(data);
       if (parseData) {
         if (sDate && eDate) {
@@ -83,6 +84,20 @@ function checkInternetConnection(sDate, eDate) {
           });
           window.localStorage.setItem(STORAGE_KEY, JSON.stringify(parseData));
         }
+        renderPastPeriods(parseData.dateList);
+      }
+    } else {
+      window.localStorage.removeItem(STORAGE_KEY);
+      console.log(sDate, "=", eDate);
+
+      if (typeof sDate == "string") {
+        dateObject = new Date(sDate);
+        userId = dateObject.getTime();
+        parseData = {
+          userId: userId,
+          dateList: [{ sDate: sDate, eDate: eDate }],
+        };
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(parseData));
         renderPastPeriods(parseData.dateList);
       }
     }
