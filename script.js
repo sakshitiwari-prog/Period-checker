@@ -2,7 +2,7 @@ let periods;
 const installButton = document.getElementById("installButton");
 const pastPeriodHeader = document.createElement("h2");
 pastPeriodHeader.textContent = "Past periods";
-let url = "http://192.168.43.87:5000/api/uploadData";
+let url = "http://localhost:5000/api/uploadData";
 const pastPeriodList = document.createElement("ul");
 const newPeriodFormEl = document.getElementsByTagName("form")[0];
 const pastPeriodContainer = document.getElementById("past-periods");
